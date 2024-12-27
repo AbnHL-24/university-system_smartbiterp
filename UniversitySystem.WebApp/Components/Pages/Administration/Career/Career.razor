@@ -1,0 +1,53 @@
+@page "/careers"
+@using UniversitySystem.Domain.Models.Career
+
+<PageTitle>Career</PageTitle>
+
+<RadzenText TextStyle="TextStyle.DisplayH3">Carreras</RadzenText>
+
+<RadzenDataGrid
+    @ref="careersGrid"
+    Data="@_careers"
+    TItem="CareerModel"
+    RowUpdate="@OnUpdateRow"
+    RowCreate="@OnCreateRow"
+    AllowFiltering="true"
+    AllowColumnResize="true"
+    AllowAlternatingRows="false"
+    FilterMode="FilterMode.Advanced"
+    AllowSorting="true"
+    PageSize="5"
+    AllowPaging="true"
+    PagerHorizontalAlign="HorizontalAlign.Left"
+    ShowPagingSummary="true"
+    ColumnWidth="300px"
+    LogicalFilterOperator="LogicalFilterOperator.Or"
+    SelectionMode="DataGridSelectionMode.Single">
+    <HeaderTemplate>
+        <RadzenButton ButtonStyle="ButtonStyle.Success" Icon="add_circle" Text="Agregar Carrera" Click="@InsertRow" />
+    </HeaderTemplate>
+    <Columns>
+        <RadzenDataGridColumn Property="@nameof(CareerModel.CareerCode)" Filterable="false" Title="Código Carrera" Frozen="true" TextAlign="TextAlign.Center">
+            <EditTemplate Context="context">
+                <RadzenNumeric @bind-Value="context.CareerCode" Style="width: 100%" Name="careerCode" ShowUpDown="false"/><br>
+                <RadzenNumericRangeValidator Min="1" Text="El código de la carrera es obligatorio" Component="careerCode" Popup="true" Style="position: absolute; z-index: 10000"/>
+            </EditTemplate>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn Property="@nameof(CareerModel.CareerName)" Title="Nombre Carrera" Frozen="true">
+            <EditTemplate Context="context">
+                <RadzenTextBox @bind-Value="context.CareerName" Style="width: 100%" Name="careerName"/><br>
+                <RadzenRequiredValidator Text="El nombre de la carrera es obligatorio" Component="careerName" Popup="true" Style="position: absolute; z-index: 10000"/>
+            </EditTemplate>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn Context="order" Filterable="false" Sortable="false" TextAlign="TextAlign.Right" Frozen="true" Width="100px" FrozenPosition="FrozenColumnPosition.Right">
+            <Template Context="career">
+                <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" Size="ButtonSize.Medium" Click="@(args => EditRow(career))" @onclick:stopPropagation="true"/>
+                <RadzenButton Icon="view_cozy" ButtonStyle="ButtonStyle.Base" Variant="Variant.Flat" Size="ButtonSize.Medium" Click="@(args => ShowCourses(career))"/>
+            </Template>
+            <EditTemplate Context="career">
+                <RadzenButton Icon="check" ButtonStyle="ButtonStyle.Success" Variant="Variant.Flat" Size="ButtonSize.Medium" Click="@((args) => SaveRow(career))" aria-label="Save"/>
+                <RadzenButton Icon="close" ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" Size="ButtonSize.Medium" class="rz-my-1 rz-ms-1" Click="@((args) => CancelEdit(career))" aria-label="Cancel"/>
+            </EditTemplate>
+        </RadzenDataGridColumn>
+    </Columns>
+</RadzenDataGrid>

@@ -1,0 +1,29 @@
+@page "/"
+@page "/login"
+@using UniversitySystem.Domain.Models.Authentication
+@layout CenterLayout
+
+<PageTitle>Login</PageTitle>
+
+<RadzenStack Gap="0" class="rz-border-radius-6 rz-shadow-10" Style="width: 100%; max-width: 400px; overflow: hidden;">
+    <RadzenCard class="rz-shadow-0 rz-border-radius-0 rz-background-color-info rz-p-12" style="text-align: center;">
+        <RadzenText TextStyle="TextStyle.DisplayH3" TagName="TagName.H2" class="rz-color-white rz-mb-0">University</RadzenText>
+    </RadzenCard>
+    <RadzenTemplateForm Method="POST" TItem="CredentialsModel" Data="@_credentials" Submit="LogIn">
+        <RadzenCard>
+            <RadzenStack Orientation="Orientation.Vertical" Gap="0">
+                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3" class="mt-4">Usuario</RadzenText>
+                <RadzenTextBox @bind-Value="_credentials.Username" class="w-100 rz-border-radius-1" Name="username" Placeholder="Ingrese usuario" />
+                <RadzenRequiredValidator Component="username" Text="El usuario es requerido" />
+            </RadzenStack>
+            <RadzenStack Orientation="Orientation.Vertical" Gap="0">
+                <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3" class="mt-4">Contraseña</RadzenText>
+                <RadzenPassword @bind-Value="_credentials.Password" class="w-100 rz-border-radius-1" Name="password" Placeholder="Ingrese contraseña" />
+                <RadzenRequiredValidator Component="password" Text="La contraseña es requerida" />
+            </RadzenStack>
+            <RadzenStack Orientation="Orientation.Vertical" Class="rz-mt-5">
+                <RadzenButton class="rz-border-radius-3 rz-mt-4" ButtonType="ButtonType.Submit" Icon="login" BusyText="Ingresando..." IsBusy="@_busy" Text="Ingresar" />
+            </RadzenStack>
+        </RadzenCard>
+    </RadzenTemplateForm>
+</RadzenStack>

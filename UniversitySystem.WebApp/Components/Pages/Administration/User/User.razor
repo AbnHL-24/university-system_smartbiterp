@@ -1,0 +1,73 @@
+@page "/users"
+@using UniversitySystem.Domain.Models
+
+<PageTitle>User</PageTitle>
+
+<RadzenText TextStyle="TextStyle.DisplayH3">Usuarios</RadzenText>
+
+<RadzenDataGrid
+    @ref="usersGrid"
+    Data="@_users"
+    TItem="UserModel"
+    RowUpdate="@OnUpdateRow"
+    RowCreate="@OnCreateRow"
+    AllowFiltering="true"
+    AllowColumnResize="true"
+    AllowAlternatingRows="false"
+    FilterMode="FilterMode.Advanced"
+    AllowSorting="true"
+    PageSize="5"
+    AllowPaging="true"
+    PagerHorizontalAlign="HorizontalAlign.Left"
+    ShowPagingSummary="true"
+    ColumnWidth="300px"
+    LogicalFilterOperator="LogicalFilterOperator.Or"
+    SelectionMode="DataGridSelectionMode.Single">
+    <HeaderTemplate>
+        <RadzenButton ButtonStyle="ButtonStyle.Success" Icon="add_circle" Text="Agregar Usuario" Click="@InsertRow" />
+    </HeaderTemplate>
+    <Columns>
+        <RadzenDataGridColumn Property="@nameof(UserModel.UserCode)" Filterable="false" Title="Código Usuario" Frozen="true" TextAlign="TextAlign.Center">
+            <EditTemplate Context="context">
+                <RadzenNumeric @bind-Value="context.UserCode" Style="width: 100%" Name="userCode" ShowUpDown="false"/><br>
+                <RadzenNumericRangeValidator Min="1" Text="El código del usuario es obligatorio" Component="userCode" Popup="true" Style="position: absolute; z-index: 10000"/>
+            </EditTemplate>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn Property="@nameof(UserModel.FullName)" Title="Nombre Completo" Frozen="true">
+            <EditTemplate Context="context">
+                <RadzenTextBox @bind-Value="context.FullName" Style="width: 100%" Name="fullName"/><br>
+                <RadzenRequiredValidator Text="El nombre completo es obligatorio" Component="fullName" Popup="true" Style="position: absolute; z-index: 10000"/>
+            </EditTemplate>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn Property="@nameof(UserModel.UserType)" Title="Tipo de Usuario" Frozen="true">
+            <EditTemplate Context="context">
+                <RadzenDropDown @bind-Value="context.UserType" Data="@(new[] { UserType.ADMIN, UserType.STUDENT, UserType.TEACHER })" Style="width: 100%" Name="userType"/><br>
+                <RadzenRequiredValidator Text="El tipo de usuario es obligatorio" Component="userType" Popup="true" Style="position: absolute; z-index: 10000"/>
+            </EditTemplate>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn Property="@nameof(UserModel.UserName)" Title="Nombre de Usuario" Frozen="true">
+            <EditTemplate Context="context">
+                <RadzenTextBox @bind-Value="context.UserName" Style="width: 100%" Name="username"/><br>
+                <RadzenRequiredValidator Text="El nombre de usuario es obligatorio" Component="username" Popup="true" Style="position: absolute; z-index: 10000"/>
+            </EditTemplate>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn Property="@nameof(UserModel.Password)" Title="Contraseña" Frozen="true">
+            <EditTemplate Context="context">
+                <RadzenPassword @bind-Value="context.Password" Style="width: 100%" Name="password"/><br>
+                <RadzenRequiredValidator Text="La contraseña es obligatoria" Component="password" Popup="true" Style="position: absolute; z-index: 10000"/>
+            </EditTemplate>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn Context="order" Filterable="false" Sortable="false" TextAlign="TextAlign.Right" Frozen="true" Width="100px" FrozenPosition="FrozenColumnPosition.Right">
+            <Template Context="order">
+                <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" Size="ButtonSize.Medium" Click="@(args => EditRow(order))" @onclick:stopPropagation="true">
+                </RadzenButton>
+            </Template>
+            <EditTemplate Context="order">
+                <RadzenButton Icon="check" ButtonStyle="ButtonStyle.Success" Variant="Variant.Flat" Size="ButtonSize.Medium" Click="@((args) => SaveRow(order))" aria-label="Save">
+                </RadzenButton>
+                <RadzenButton Icon="close" ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" Size="ButtonSize.Medium" class="rz-my-1 rz-ms-1" Click="@((args) => CancelEdit(order))" aria-label="Cancel">
+                </RadzenButton>
+            </EditTemplate>
+        </RadzenDataGridColumn>
+    </Columns>
+</RadzenDataGrid>

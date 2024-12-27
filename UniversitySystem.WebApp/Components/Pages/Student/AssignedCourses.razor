@@ -1,0 +1,45 @@
+@page "/assigned-courses"
+@using UniversitySystem.Domain.Models.Course
+
+<PageTitle>Cursos asignados</PageTitle>
+
+<RadzenText TextStyle="TextStyle.DisplayH3">Cursos Asignados</RadzenText>
+
+<RadzenDataGrid
+    Data="@_assignedCourses"
+    AllowFiltering="true"
+    AllowColumnResize="true"
+    AllowAlternatingRows="false"
+    FilterMode="FilterMode.Advanced"
+    AllowSorting="true"
+    PageSize="5"
+    AllowPaging="true"
+    PagerHorizontalAlign="HorizontalAlign.Left"
+    ShowPagingSummary="true"
+    LogicalFilterOperator="LogicalFilterOperator.Or"
+    SelectionMode="DataGridSelectionMode.Single">
+    <HeaderTemplate>
+        <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.End">
+            <RadzenButton ButtonStyle="ButtonStyle.Success" Icon="download" Text="Descargar Constancia" Click="ExportReport" />
+        </RadzenStack>
+    </HeaderTemplate>
+    <Columns>
+        <RadzenDataGridColumn Property="@nameof(AssignedCourse.CourseCode)"Title="Código Curso" TextAlign="TextAlign.Center"/>
+        <RadzenDataGridColumn Property="@nameof(AssignedCourse.CourseName)" Title="Nombre Curso"/>
+        <RadzenDataGridColumn Property="@nameof(AssignedCourse.Year)" Title="Año"/>
+        <RadzenDataGridColumn Property="@nameof(AssignedCourse.Semester)" Title="Semestre" TextAlign="TextAlign.Center"/>
+        <RadzenDataGridColumn Property="@nameof(AssignedCourse.Grade)" Title="Nota" TextAlign="TextAlign.Center"/>
+        <RadzenDataGridColumn Property="@nameof(AssignedCourse.Approved)" Title="Estado" TextAlign="TextAlign.Center">
+            <Template Context="context">
+                @if (context.Approved)
+                {
+                    <RadzenBadge Text="Aprobado" BadgeStyle="BadgeStyle.Success" Shade="Shade.Light"/>
+                }
+                else
+                {
+                    <RadzenBadge Text="Reprobado" BadgeStyle="BadgeStyle.Danger" Shade="Shade.Light"/>
+                }
+            </Template>
+        </RadzenDataGridColumn>
+    </Columns>
+</RadzenDataGrid>

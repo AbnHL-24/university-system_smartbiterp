@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Radzen.Blazor" Version="5.7.2" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\UniversitySystem.Persistence\UniversitySystem.Persistence.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Components\Pages\Administration\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <AdditionalFiles Include="Components\Pages\Administration\Career\Career.razor" />
+      <AdditionalFiles Include="Components\Pages\Administration\Career\CareerCoursesDialog.razor" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="Components\Pages\Course\Course.razor" />
+      <_ContentIncludedByDefault Remove="Components\Pages\User\User.razor" />
+    </ItemGroup>
+
+</Project>

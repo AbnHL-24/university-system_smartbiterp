@@ -1,0 +1,71 @@
+﻿@inherits LayoutComponentBase
+
+<RadzenComponents @rendermode="InteractiveServer"/>
+
+<RadzenLayout Style="grid-template-areas: 'rz-sidebar rz-header' 'rz-sidebar rz-body'">
+    <RadzenHeader>
+        <RadzenRow JustifyContent="JustifyContent.Start" AlignItems="AlignItems.Center" Gap="0">
+            <RadzenColumn Size="5">
+                <RadzenSidebarToggle Click="@(() => _collapseNavMenu = !_collapseNavMenu)"></RadzenSidebarToggle>
+            </RadzenColumn>
+            <RadzenColumn Size="7">
+                <RadzenStack AlignItems="AlignItems.Center" Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.End">
+                    <RadzenProfileMenu>
+                        <Template>
+                            <RadzenRow AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Left">
+                                <RadzenColumn Size="10" Style="width:300px; text-align:right;">
+                                    <RadzenText TextStyle="TextStyle.Subtitle1" class="rz-mb-0" style="color: black;">
+                                        <AuthorizeView>
+                                            <Authorized>
+                                                <RadzenText Text="@context.User.Identity!.Name" />
+                                            </Authorized>
+                                        </AuthorizeView>
+                                    </RadzenText>
+                                </RadzenColumn>
+                            </RadzenRow>
+                        </Template>
+                        <ChildContent>
+                            <RadzenProfileMenuItem Text="Cerrar Sesión" Icon="logout" Path="@($"{NavigationManager.BaseUri}logout")"></RadzenProfileMenuItem>
+                        </ChildContent>
+                    </RadzenProfileMenu>
+                </RadzenStack>
+            </RadzenColumn>
+        </RadzenRow>
+    </RadzenHeader>
+    <RadzenSidebar Expanded="@_collapseNavMenu" style="z-index: 2" Responsive="true">
+        <RadzenStack AlignItems="AlignItems.Center" class="rz-py-4 rz-py-lg-6" >
+            <RadzenImage Path="images/graduation.png" style="width: 48px; height: 48px;"></RadzenImage>
+            <RadzenText Text="University" TextStyle="TextStyle.Subtitle1" class="rz-mb-0" />
+            <RadzenStack AlignItems="AlignItems.Center" Gap="0" class="rz-py-4" >
+                <RadzenText Text="@_version" TextStyle="TextStyle.Caption" class="rz-mb-0"  TagName="TagName.P" TextAlign="TextAlign.Center"/>
+            </RadzenStack>
+        </RadzenStack>
+        <RadzenPanelMenu DisplayStyle="MenuItemDisplayStyle.IconAndText">
+            <RadzenPanelMenuItem Text="Inicio" Path="@($"{NavigationManager.BaseUri}index")" Icon="home"/>
+            <AuthorizeView Roles = "ADMIN">
+                <Authorized>
+                    <RadzenPanelMenuItem Text="Administracion" Icon="">
+                        <RadzenPanelMenuItem Text="Usuarios" Path="@($"{NavigationManager.BaseUri}users")" Icon="feed"/>
+                        <RadzenPanelMenuItem Text="Carreras" Path="@($"{NavigationManager.BaseUri}careers")" Icon="feed"/>
+                        <RadzenPanelMenuItem Text="Cursos" Path="@($"{NavigationManager.BaseUri}courses")" Icon="feed"/>
+                    </RadzenPanelMenuItem>
+                </Authorized>
+            </AuthorizeView>
+            <AuthorizeView Roles="TEACHER">
+                <Authorized>
+                    <RadzenPanelMenuItem Text="Subir Nota" Path="@($"{NavigationManager.BaseUri}csv-soportes-f47-rebate")" Icon="feed"/>
+                    <RadzenPanelMenuItem Text="Cursos Asignados" Path="@($"{NavigationManager.BaseUri}soportes-f47-rebate")" Icon="feed"/>
+                </Authorized>
+            </AuthorizeView>
+            <AuthorizeView Roles="STUDENT">
+                <Authorized>
+                    <RadzenPanelMenuItem Text="Asignar Curso" Path="@($"{NavigationManager.BaseUri}notas-credito-f47-rebate")" Icon="feed"/>
+                    <RadzenPanelMenuItem Text="Cursos Asignados" Path="@($"{NavigationManager.BaseUri}assigned-courses")" Icon="feed"/>
+                </Authorized>
+            </AuthorizeView>
+        </RadzenPanelMenu>
+    </RadzenSidebar>
+    <RadzenBody Expanded="@_collapseNavMenu" Style="float: none; font-style: normal; text-align: left; text-transform: none">
+        @Body
+    </RadzenBody>
+</RadzenLayout>

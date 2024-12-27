@@ -1,0 +1,52 @@
+@page "/career-courses/{CareerCode:int}"
+@using UniversitySystem.Domain.Models
+@using UniversitySystem.Domain.Models.Career
+
+<PageTitle>Cursos Carrera</PageTitle>
+<h3>CareerCourses</h3>
+
+<RadzenDataGrid
+    @ref="careerCoursesGrid"
+    Data="@_careerCourses"
+    TItem="CareerCourseModel"
+    RowCreate="@OnCreateRow"
+    AllowFiltering="true"
+    AllowColumnResize="true"
+    AllowAlternatingRows="false"
+    FilterMode="FilterMode.Advanced"
+    AllowSorting="true"
+    PageSize="5"
+    AllowPaging="true"
+    PagerHorizontalAlign="HorizontalAlign.Left"
+    ShowPagingSummary="true"
+    ColumnWidth="300px"
+    LogicalFilterOperator="LogicalFilterOperator.Or"
+    SelectionMode="DataGridSelectionMode.Single">
+    <HeaderTemplate>
+        <RadzenButton ButtonStyle="ButtonStyle.Success" Icon="add_circle" Text="Agregar Curso" Click="@InsertRow" />
+    </HeaderTemplate>
+    <Columns>
+        <RadzenDataGridColumn Property="@nameof(CareerCourseModel.CourseName)" Title="Curso" Frozen="true">
+            <EditTemplate Context="context">
+                <RadzenDropDown @bind-Value="context.CourseCode" Data="@_courses" TextProperty="@nameof(CourseModel.CourseName)" ValueProperty="@nameof(CourseModel.CourseCode)"
+                                InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "Select customer" }})" Name="course" /><br/>
+                <RadzenRequiredValidator Text="El curso es obligatorio" Component="course" Popup="true" Style="position: absolute; z-index: 10000"/>
+            </EditTemplate>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn Property="@nameof(CareerCourseModel.Semester)" Title="Semestre">
+            <EditTemplate Context="context">
+                <RadzenNumeric @bind-Value="context.Semester" Style="width: 100%" Name="careerCourseSemester" ShowUpDown="false"/><br>
+                <RadzenNumericRangeValidator Min="1" Text="El semestre es obligatorio" Component="careerCourseSemester" Popup="true" Style="position: absolute; z-index: 10000"/>
+            </EditTemplate>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn Context="order" Filterable="false" Sortable="false" TextAlign="TextAlign.Right" Frozen="true" Width="100px" FrozenPosition="FrozenColumnPosition.Right">
+            <Template>
+                <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="delete" Variant="Variant.Flat" Shade="Shade.Lighter" Size="ButtonSize.Medium" class="rz-my-1 rz-ms-1" Click="@(args => DeleteRow(order))" @onclick:stopPropagation="true" />
+            </Template>
+            <EditTemplate Context="order">
+                <RadzenButton Icon="check" ButtonStyle="ButtonStyle.Success" Variant="Variant.Flat" Size="ButtonSize.Medium" Click="@((args) => SaveRow(order))" aria-label="Save"/>
+                <RadzenButton Icon="close" ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" Size="ButtonSize.Medium" class="rz-my-1 rz-ms-1" Click="@((args) => CancelEdit(order))" aria-label="Cancel"/>
+            </EditTemplate>
+        </RadzenDataGridColumn>
+    </Columns>
+</RadzenDataGrid>
